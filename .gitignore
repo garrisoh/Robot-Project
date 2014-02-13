@@ -1,0 +1,6 @@
+# Don't track the temp files.
+*~
+# Java stuff
+*.class
+*.classpath
+*.project

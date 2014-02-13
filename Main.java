@@ -1,12 +1,15 @@
+import com.leapmotion.leap.Controller;
+
 
 public class Main {
 
 	public static void main(String[] args) {
-		SerialCom sc = SerialCom(args[0]);
+		SerialComm sc = new SerialComm(args);
 		Arm arm = new Arm(sc);
 		View view = new View();
-		Controller.addListener(arm);
-		Controller.addListener(view);
+		Controller controller = new Controller();
+		controller.addListener(arm);
+		controller.addListener(view);
 		
 		try{
 		      System.in.read();
