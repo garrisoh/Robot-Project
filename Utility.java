@@ -54,7 +54,6 @@ public class Utility {
 	 */
 	
 	public static double map(double value,double low1, double high1, double low2, double high2){
-		// at the moment all that happens is that if the point is out of range it is set to the max or min.
 		double percent = (value - low1)/(high1 - low1);
 	    if(percent > 1) {
 	        percent = 1;
