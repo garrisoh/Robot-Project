@@ -1,6 +1,5 @@
 import com.leapmotion.leap.Controller;
 
-
 public class Main {
 
 	public static void main(String[] args) {
@@ -17,7 +16,7 @@ public class Main {
 		    catch (Exception e){
 		        System.out.print(e);
 		      }
-
+	      // forces GUI window to close	
+	      System.exit(0);
 	}
-
 }

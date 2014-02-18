@@ -13,11 +13,30 @@ Suggestions:
 */
 
 
-import com.leapmotion.leap.Listener;
+import com.leapmotion.leap.*;
 
 class Arm extends Listener
 {
-	
+	// leap motion max and min coordinates
+	private static final double MAX_X = 200;
+	private static final double MAX_Y = 200;
+	private static final double MAX_Z = 400;
+	private static final double MAX_R = 100;
+	private static final double MIN_X = -200;
+	private static final double MIN_Y = -200;
+	private static final double MIN_Z = 0;
+	private static final double MIN_R = 52;
+
+	// robot arm max and min coordinates
+	private static final double MAX2_X = 20;
+	private static final double MAX2_Y = 30;
+	private static final double MAX2_Z = 10;
+	private static final double MAX2_R = 6;
+	private static final double MIN2_X = -20;
+	private static final double MIN2_Y = 10;
+	private static final double MIN2_Z = -7.5;
+	private static final double MIN2_R = 0;
+    
 	public static void main(String[] args)
 	{
 		Arm arm = new Arm(new SerialComm(args));
@@ -29,6 +48,38 @@ class Arm extends Listener
 		System.out.println(arm.safetyCheckAxisAngles(new double[]{131323,1192, 440,-1111}));
 	}
 	
+    /**
+	 * Calculates angles and send to the arduino
+	 *
+	 * @param c Leap controller
+	 */
+	public void onFrame(Controller c) {
+		// Check that there are hands in the field
+		HandList hands = c.frame().hands();
+		if (hands.count() <= 0) {
+			return;
+		}
+		
+		// Check that the hand is open
+		Hand hand = hands.rightmost();
+		if (hand.fingers().count() < 2) {
+			return;
+		}
+        
+		// Get Leap coordinates
+		Vector position = hand.palmPosition();
+		double grip = hand.sphereRadius();
+        double leapX = position.getX();
+        double leapY = position.getY();
+        double leapZ = position.getZ();
+        
+        double robotX = Utility.map(leapX, MIN_X, MAX_X, MIN2_X, MAX2_X);
+        double robotY = Utility.map(leapY, MIN_Y, MAX_Y, MIN2_Y, MAX2_Y);
+        double robotZ = Utility.map(leapZ, MIN_Z, MAX_Z, MIN2_Z, MAX2_Z);
+        double robotGrip = Utility.map(grip, MIN_R, MAX_R, MIN2_R, MAX2_R);
+        
+        set(robotX, robotY, robotZ, robotGrip);
+	}
 	
 	
 	double[] axisAngles;
@@ -96,11 +147,6 @@ class Arm extends Listener
 
 		this.segment1Length = 15.25;	// in cm
 		this.segment2Length = 12;	// in cm
-
-		
-		onReady();
-
-
 	}
 
 	void onReady()
@@ -325,11 +371,13 @@ class Arm extends Listener
 			System.out.println("invalid angles passed to setAxisAnglesOptimized. These should have been checked earlier.");
 			return;
 		}
-		double[] servoAngles = new double[newAngles.length];
+		double[] servoAngles = new double[5];
 		for(int i = 0; i < newAngles.length; ++i)
 		{
 			servoAngles[i] = newAngles[i] + axisToMotorAdjustments[i];
 		}
+		for(int i = newAngles.length; i < 5; ++i)
+			servoAngles[i] = axisAngles[i] + axisToMotorAdjustments[i];
 		comm.send(servoAngles[0], servoAngles[1], servoAngles[2], servoAngles[3], servoAngles[4]);
 		/*
 		for ( int i = 0; i < newAngles.length; ++i)

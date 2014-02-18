@@ -48,7 +48,7 @@ public class SerialComm extends SerialManager {
 	 * @return A single byte representing the angle
 	 */
 	private byte mapAngleToByte(double angle) {
-		//angle = Utility.map(angle, 0, 180, -128, 127);
+		angle = Utility.map(angle, 0, 180, -128, 127);
 		return (byte)Math.round((float)angle);
 	}
 }
