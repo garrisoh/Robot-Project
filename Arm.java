@@ -88,7 +88,7 @@ class Arm extends Listener
 	double[] shoulderAxisRange = {45,135};    // not the actual limits of axis, but going lower risks slamming into the ground
 	double[] elbowAxisRange = {-140,0};
 	double[] wristAxisRange = {-90, 90};
-	double[] gripAxisRange = {35, 90};
+	double[] gripAxisRange = {30, 90};
 	double[][] axisRanges = {this.baseAxisRange, this.shoulderAxisRange, this.elbowAxisRange, this.wristAxisRange, this.gripAxisRange};
 
 	
@@ -369,6 +369,9 @@ class Arm extends Listener
 		if (!this.safetyCheckAxisAngles(newAngles))
 		{
 			System.out.println("invalid angles passed to setAxisAnglesOptimized. These should have been checked earlier.");
+			for(int i=0; i<newAngles.length; i++) {
+				System.out.println(newAngles[i]);
+			}
 			return;
 		}
 		double[] servoAngles = new double[5];

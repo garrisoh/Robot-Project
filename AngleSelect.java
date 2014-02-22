@@ -13,7 +13,7 @@ public class AngleSelect {
 				if (input.equals("x"))
 					break;
 				Integer angle = new Integer(input);
-				double[] angles = {0, 90, angle, 0, 90};
+				double[] angles = {0, 90, -45, 0, angle};
 				arm.setAxisAnglesOptimized(angles);
 			}
 		}

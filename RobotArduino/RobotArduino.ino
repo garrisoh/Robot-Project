@@ -8,11 +8,11 @@ void setup() {
   Serial.begin(9600);
   
   // attach servos to pins
-  base.attach(outputPins[0]);
-  shoulder.attach(outputPins[1]);
+  base.attach(outputPins[4]);
+  shoulder.attach(outputPins[3]);
   elbow.attach(outputPins[2]);
-  wrist.attach(outputPins[3]);
-  grip.attach(outputPins[4]);
+  wrist.attach(outputPins[1]);
+  grip.attach(outputPins[0]);
 }
 
 void loop() {
