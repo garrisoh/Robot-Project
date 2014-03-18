@@ -28,11 +28,6 @@ void loop() {
       converted[i] = map(received[i], -128, 127, 0, 180);
     }
     
-    // test to see if the sent data is what is expected
-    /*if(converted[0] == 180 && converted[1] == 0 && converted[2] == 90 && converted[3] == 0 && converted[4] == 180) {
-      Serial.println("Message Received Correctly");
-    }*/
-    
     // write the angles to the servos
     base.write(converted[0]);
     shoulder.write(converted[1]);
